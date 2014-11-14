@@ -4,7 +4,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+//===========================================================================
+//                           Structure
+//===========================================================================
 
+typedef struct
+{
+  int witdh;
+  int height;
+  u_char* data;
+  // int taille_tab;
+}image;
 
 //============================================================================
 //                           Function declarations
@@ -57,9 +67,9 @@ int main(int argc, char* argv[])
    ppm_desaturate(image_bw, width, height);
 
   // Write the desaturated image into "gargouille_BW.ppm"
-  //FILE* ppm_output = fopen("gargouille_BW.ppm", "wb");
+
   ppm_write_to_file(width, height, image_bw, "gargouille_BW.ppm");
-  //fclose(ppm_output);
+
 
   // Free the desaturated image
   free(image_bw);
