@@ -103,6 +103,7 @@ int main(int argc, char* argv[])
   // Write the shrinked image into "gargouille_small.ppm"
   ppm_write_to_file(image_small, "gargouille_small.ppm");
  
+  ppm_write_to_file(theimage,"gargouille2.ppm");
   
   // Free the not yet freed images
 
@@ -149,20 +150,13 @@ image* ppm_read_from_file(char* filename)
   image* im= NULL;
   im=(image*)malloc(sizeof(image));
 
-  //create int to get the values of width and height
-  int w=0;
-  int h=0;
 
   // Read file header
-  fscanf(file, "P6\n%d %d\n255\n", &w, &h);
-
-  //change the image values
-  im->width=w;
-  im->height=h;
+  fscanf(file, "P6\n%d %d\n255\n", &im->width, &im->height);
 
 
   // Allocate memory according to width and height
-  im->data = (u_char*) malloc(3 * (w) * (h) * sizeof(u_char));
+  im->data = (u_char*) malloc(3 * (im->width) * (im->height) * sizeof(u_char));
 
 
   // Read the actual image data
