@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-//#include <string.h>
+#include <string.h>
 #include "Image.h"
 
 
@@ -80,6 +80,8 @@ int main(int argc, char* argv[])
   free(image_small);
   free(image_bw);
   free(theimage);
+
+  //delete [] theimage;
 
 
   return 0;

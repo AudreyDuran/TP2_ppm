@@ -2,12 +2,12 @@
 
 all: ppm.out      
 
-ppm.out :  ppm.c Image.o
-	g++ -o ppm.out ppm.c Image.o -Wall
+ppm.out :  ppm.cpp Image.o
+	g++ -o ppm.out ppm.cpp Image.o -Wall
 
 #pour créer Vector.o, il faut faire ça
-Image.o : Image.h Image.c 
-	g++ -Wall -o Image.o Image.c -c
+Image.o : Image.h Image.cpp 
+	g++ -Wall -o Image.o Image.cpp -c
 
 clean:
 	rm *.o

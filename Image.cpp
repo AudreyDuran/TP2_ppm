@@ -13,7 +13,7 @@
 
 
 
-void ppm_write_to_file(image* im, char* filename)
+void ppm_write_to_file(image* im, const char* filename)
 {
   //create a pointer on a file and open the image into the file
   FILE* file = fopen(filename, "wb");
@@ -29,7 +29,7 @@ void ppm_write_to_file(image* im, char* filename)
   fclose(file);
 }
 
-image* ppm_read_from_file(char* filename)
+image* ppm_read_from_file(const char* filename)
 {
 
   //create a pointer on a file and open the image into the file
@@ -38,6 +38,7 @@ image* ppm_read_from_file(char* filename)
   //create a pointer on an image structure
   image* im= NULL;
   im=(image*)malloc(sizeof(image));
+  //im = new image();
 
 
   // Read file header
@@ -46,6 +47,7 @@ image* ppm_read_from_file(char* filename)
 
   // Allocate memory according to width and height
   im->data = (u_char*) malloc(3 * (im->width) * (im->height) * sizeof(u_char));
+  //im->data = new u_char( 3 * (im->width) * (im->height) * sizeof(u_char));
 
 
   // Read the actual image data
@@ -55,6 +57,7 @@ image* ppm_read_from_file(char* filename)
 
   //Close the file
   fclose(file);
+  //delete [] im->data;?
 }
 
 //void ppm_desaturate(u_char* imagechar, int width, int height)
@@ -91,6 +94,7 @@ void ppm_shrink(image* im, int factor)
   int new_width   = (im->width) / factor;
   int new_height  = (im->height) / factor;
   u_char* new_image = (u_char*) malloc(3 * new_width * new_height * sizeof(*new_image));
+  //u_char* new_image = new u_char[3 * new_width * new_height];
 
   // Precompute factor^2 (for performance reasons)
   int factor_squared = factor * factor;
