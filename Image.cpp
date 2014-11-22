@@ -37,8 +37,8 @@ image* ppm_read_from_file(const char* filename)
 
   //create a pointer on an image structure
   image* im= NULL;
-  im=(image*)malloc(sizeof(image));
-  //im = new image();
+  //im=(image*)malloc(sizeof(image));
+  im = new image();
 
 
   // Read file header
@@ -46,9 +46,10 @@ image* ppm_read_from_file(const char* filename)
 
 
   // Allocate memory according to width and height
-  im->data = (u_char*) malloc(3 * (im->width) * (im->height) * sizeof(u_char));
-  //im->data = new u_char( 3 * (im->width) * (im->height) * sizeof(u_char));
-
+  //im->data = (u_char*) malloc(3 * (im->width) * (im->height) * sizeof(u_char));
+  delete [] im->data;
+  im->data = new u_char[3 * (im->width) * (im->height) * sizeof(u_char)];
+  
 
   // Read the actual image data
   fread(im->data, 3, (im->width) * (im->height), file);
@@ -93,8 +94,8 @@ void ppm_shrink(image* im, int factor)
   // Compute new image size and allocate memory for the new image
   int new_width   = (im->width) / factor;
   int new_height  = (im->height) / factor;
-  u_char* new_image = (u_char*) malloc(3 * new_width * new_height * sizeof(*new_image));
-  //u_char* new_image = new u_char[3 * new_width * new_height];
+  //u_char* new_image = (u_char*) malloc(3 * new_width * new_height * sizeof(*new_image));
+  u_char* new_image = new u_char[3 * new_width * new_height];
 
   // Precompute factor^2 (for performance reasons)
   int factor_squared = factor * factor;

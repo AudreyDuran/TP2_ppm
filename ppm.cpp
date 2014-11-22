@@ -29,13 +29,18 @@ int main(int argc, char* argv[])
   // Copy image into image_bw
 
   image* image_bw=NULL;
-  image_bw=(image*)malloc(sizeof(image)); 
+  //image_bw=(image*)malloc(sizeof(image)); 
+  image_bw = new image();
+  //image_bw->width = theimage->width;
   image_bw->width = theimage->width;
   image_bw->height = theimage->height;
+  
 
-  image_bw->data = (u_char*)malloc(3 * (image_bw->width) * (image_bw->height) * sizeof(*(image_bw->data)));
+  //image_bw->data = (u_char*)malloc(3 * (image_bw->width) * (image_bw->height) * sizeof(*(image_bw->data)));
+  image_bw->data = new u_char[3 * (image_bw->width) * (image_bw->height) * sizeof(u_char)];
 
-  memcpy(image_bw->data, theimage->data, 3 * (image_bw->width) * (image_bw->height) * sizeof(*(image_bw->data)));
+  //memcpy(image_bw->data, theimage->data, 3 * (image_bw->width) * (image_bw->height) * sizeof(*(image_bw->data)));
+  memcpy(image_bw->data, theimage->data, 3 * (image_bw->width) * (image_bw->height) * sizeof(u_char));
 
 
   // Desaturate image_bw
@@ -57,11 +62,13 @@ int main(int argc, char* argv[])
   // Copy image into image_small
 
   image* image_small=NULL;
-  image_small=(image*)malloc(sizeof(image)); 
+  //image_small=(image*)malloc(sizeof(image)); 
+  image_small = new image();
   image_small->width = theimage->width;
   image_small->height = theimage->height;
 
-  image_small->data = (u_char*)malloc(3 * (image_small->width) * (image_small->height) * sizeof(*(image_small->data)));
+  //image_small->data = (u_char*)malloc(3 * (image_small->width) * (image_small->height) * sizeof(*(image_small->data)));
+  image_small->data = new u_char[3 * (image_small->width) * (image_small->height) * sizeof(*(image_small->data))];
 
   memcpy(image_small->data, theimage->data, 3 * (image_small->width) * (image_small->height) * sizeof(*(image_small->data)));
 
@@ -77,11 +84,14 @@ int main(int argc, char* argv[])
   // Free the not yet freed images
 
   //free(image_small);
-  free(image_small);
-  free(image_bw);
-  free(theimage);
+  
+  delete [] image_bw->data;
+  delete [] theimage->data;
+  delete [] image_small->data;
 
-  //delete [] theimage;
+  delete [] image_small;
+  delete [] image_bw;
+  delete [] theimage;
 
 
   return 0;
