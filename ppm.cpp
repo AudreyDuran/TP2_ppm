@@ -48,13 +48,7 @@ int main(int argc, char* argv[])
   // Write the shrinked image into "gargouille_small.ppm"
   image_small.ppm_write_to_file("gargouille_small.ppm");
  
-  //ppm_write_to_file(theimage,"gargouille2.ppm");
-  theimage.ppm_write_to_file("gargouille2.ppm");
-  
-  // Free the not yet freed images
-
-  //free(image_small);
-  
+  //Delete all the not yet deleted pointer
   delete [] theimage.getData();
   delete [] image_small.getData();
   delete [] image_bw.getData();

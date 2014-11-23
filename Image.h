@@ -2,29 +2,20 @@
 //                           Structure
 //===========================================================================
 
-/*typedef struct
-{
-  int width;
-  int height;
-  u_char* data;
-
-}image;*/
-
 class Image
 {
 
 
-
 //============================================================================
-//                           Function declarations
+//                        Other Function declarations
 //============================================================================
 
 public:
 
-	//create an image with no height and width
+	//default constructor
 	Image(void);
 
-	//create a new image from an Image which exists already 
+	//constructor that create a new Image from an Image which exists already 
 	Image(const Image& im);
 
 	// Write the image contained in <data> (of size <width> * <height>)
