@@ -4,7 +4,40 @@
 #include <string.h>
 #include "Image.h"
 
+//============================================================================
+//                          Constructors
+//============================================================================
 
+Image::Image(void)
+{
+  width=0;
+  height=0;
+  data = new u_char[1];
+}
+
+
+Image::Image(const Image& im)
+{
+  width = im.getWidth();
+  height = im.getHeight();
+  data = new u_char[3 * im.getWidth() * im.getHeight() * sizeof(u_char)];
+  memcpy(data, im.getData(), 3 * width * height * sizeof(*data));
+}
+
+//============================================================================
+//                            Getters
+//============================================================================
+int Image::getWidth(void) const{
+  return width;
+}
+
+int Image::getHeight(void) const{
+  return height;
+}
+
+u_char* Image::getData(void) const{
+  return data;
+}
 
 
 //============================================================================
@@ -12,64 +45,58 @@
 //============================================================================
 
 
-
-void ppm_write_to_file(image* im, const char* filename)
+//void Image::ppm_write_to_file(Image* im, const char* filename)
+void Image::ppm_write_to_file(const char* filename)
 {
   //create a pointer on a file and open the image into the file
   FILE* file = fopen(filename, "wb");
 
 
   // Write header
-  fprintf(file, "P6\n%d %d\n255\n", im->width, im->height);
+  fprintf(file, "P6\n%d %d\n255\n", width, height);
 
   // Write pixels
-  fwrite(im->data, 3, (im->width) * (im->height), file);
+  fwrite(data, 3, width * height, file);
 
   //Close the file
   fclose(file);
 }
 
-image* ppm_read_from_file(const char* filename)
+void Image::ppm_read_from_file(const char* filename)
 {
 
   //create a pointer on a file and open the image into the file
   FILE* file = fopen(filename, "rb");
 
-  //create a pointer on an image structure
-  image* im= NULL;
-  //im=(image*)malloc(sizeof(image));
-  im = new image();
-
 
   // Read file header
-  fscanf(file, "P6\n%d %d\n255\n", &im->width, &im->height);
+  fscanf(file, "P6\n%d %d\n255\n", &width, &height);
 
+  //Delete the data temporary which had been created in the constructor
+   delete [] data;
 
   // Allocate memory according to width and height
-  //im->data = (u_char*) malloc(3 * (im->width) * (im->height) * sizeof(u_char));
-  delete [] im->data;
-  im->data = new u_char[3 * (im->width) * (im->height) * sizeof(u_char)];
+  data = new u_char[3 * (width) * (height) * sizeof(u_char)];
   
 
   // Read the actual image data
-  fread(im->data, 3, (im->width) * (im->height), file);
-
-  return im;
+  fread(data, 3, width * height, file);
 
   //Close the file
   fclose(file);
-  //delete [] im->data;?
+
 }
 
-//void ppm_desaturate(u_char* imagechar, int width, int height)
-void ppm_desaturate(image* im)
+
+void Image::ppm_desaturate(void)
 {
   int x, y;
 
   // For each pixel ...
-  for (x = 0 ; x < im->width ; x++)
+
+  for (x = 0 ; x < width ; x++)
   {
-    for (y = 0 ; y < im->height ; y++)
+    for (y = 0 ; y < height ; y++)
     {
       u_int grey_lvl = 0;
       int rgb_canal;
@@ -77,24 +104,24 @@ void ppm_desaturate(image* im)
       // Compute the grey level
       for (rgb_canal = 0 ; rgb_canal < 3 ; rgb_canal++)
       {
-        grey_lvl += im->data[ 3 * (y * (im->width) + x) + rgb_canal ];
+        grey_lvl += data[ 3 * (y * width + x) + rgb_canal ];
       }
       grey_lvl /= 3;
       assert(grey_lvl >= 0 && grey_lvl <=255);
 
       // Set the corresponding pixel's value in new_image
-      memset(&im->data[3 * (y * (im->width) + x)], grey_lvl, 3);
+      memset(&data[3 * (y * width + x)], grey_lvl, 3);
     }
   }
 }
 
 
-void ppm_shrink(image* im, int factor)
+void Image::ppm_shrink(int factor)
 {
   // Compute new image size and allocate memory for the new image
-  int new_width   = (im->width) / factor;
-  int new_height  = (im->height) / factor;
-  //u_char* new_image = (u_char*) malloc(3 * new_width * new_height * sizeof(*new_image));
+  int new_width   = width / factor;
+  int new_height  = height / factor;
+
   u_char* new_image = new u_char[3 * new_width * new_height];
 
   // Precompute factor^2 (for performance reasons)
@@ -118,7 +145,7 @@ void ppm_shrink(image* im, int factor)
       // model image corresponding to the pixel we are creating
       int x0 = x * factor;
       int y0 = y * factor;
-      int i0 = 3 * (y0 * (im->width) + x0);
+      int i0 = 3 * (y0 * width + x0);
 
       // Compute RGB values for the new pixel
       int dx, dy;
@@ -128,12 +155,12 @@ void ppm_shrink(image* im, int factor)
         {
           // Compute the offset of the current pixel (in the model image)
           // with regard to the top-left pixel of the current "set of pixels"
-          int delta_i = 3 * (dy * (im->width) + dx);
+          int delta_i = 3 * (dy * (width) + dx);
 
           // Accumulate RGB values
-          red   += (im->data)[i0+delta_i];
-          green += (im->data)[i0+delta_i+1];
-          blue  += (im->data)[i0+delta_i+2];
+          red   += data[i0+delta_i];
+          green += data[i0+delta_i+1];
+          blue  += data[i0+delta_i+2];
         }
       }
 
@@ -150,13 +177,14 @@ void ppm_shrink(image* im, int factor)
   }
 
   // Update image size
-  im->width = new_width;
-  im->height = new_height;
+  width = new_width;
+  height = new_height;
 
   // Update image
-  //free(im->data);
-  im->data = new_image;
- 
+
+  delete [] data;
+  data = new_image;
+
 }
 
 
