@@ -18,10 +18,10 @@ Image::Image(void)
 
 Image::Image(const Image& im)
 {
-  width = im.getWidth();
-  height = im.getHeight();
-  data = new u_char[3 * im.getWidth() * im.getHeight() * sizeof(u_char)];
-  memcpy(data, im.getData(), 3 * width * height * sizeof(*data));
+  width = im.width;
+  height = im.height;
+  data = new u_char[3 * im.width * im.height * sizeof(u_char)];
+  memcpy(data, im.data, 3 * width * height * sizeof(*data));
 }
 
 //============================================================================
