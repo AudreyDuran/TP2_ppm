@@ -12,7 +12,7 @@ Image::Image(void)
 {
   width=0;
   height=0;
-  data = new u_char[1];
+  data = NULL;
 }
 
 
@@ -38,6 +38,18 @@ int Image::getHeight(void) const{
 u_char* Image::getData(void) const{
   return data;
 }
+
+
+//============================================================================
+//                          Destructor
+//============================================================================
+
+Image::~Image(void)
+{
+  delete [] data;
+
+}
+
 
 
 //============================================================================

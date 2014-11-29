@@ -15,6 +15,9 @@ public:
 	//constructor that create a new Image from an Image which exists already 
 	Image(const Image& im);
 
+	//destuctor
+	~Image(void);
+
 	// Write the image contained in <data> (of size <width> * <height>)
 	// into plain RGB ppm file <file>
 	void ppm_write_to_file(const char* filename);
