@@ -20,7 +20,7 @@ public:
 
 	// Write the image contained in <data> (of size <width> * <height>)
 	// into plain RGB ppm file <file>
-	void ppm_write_to_file(const char* filename);
+	void ppm_write_to_file(const char* filename) const;
 
 	// Read the image contained in plain RGB ppm file <file>
 	// into <data> and set <width> and <height> accordingly

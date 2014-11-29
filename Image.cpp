@@ -58,7 +58,7 @@ Image::~Image(void)
 
 
 //void Image::ppm_write_to_file(Image* im, const char* filename)
-void Image::ppm_write_to_file(const char* filename)
+void Image::ppm_write_to_file(const char* filename) const
 {
   //create a pointer on a file and open the image into the file
   FILE* file = fopen(filename, "wb");
